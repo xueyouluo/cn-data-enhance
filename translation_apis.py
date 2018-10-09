@@ -47,7 +47,7 @@ def youdao_translate(content, from_lang='zh',to='en'):
         'action':'FY_BY_CLICKBUTTION',
         'typoResult':'false'
     }
-    ret = requests.post('http://fanyi.youdao.com/translate_o',data=data,headers=headers).json()
+    ret = requests.post('http://fanyi.youdao.com/translate_o',data=data,headers=headers,timeout=5).json()
     trans = []
     for item in ret['translateResult'][0]:
         trans.append(item['tgt'])
@@ -77,7 +77,7 @@ def tencent_translate(content,from_lang='zh',to='en'):
         "Cookie":"fy_guid=d4480e20-1644-4a47-a98d-787cfa244fd2; qtv=bbbc7118b32d7a9a; qtk=DTmfpOAn6b6HWTGtjW7w5a/FOommFjJPAre3GpaRUzPCQSaqY3gOSzKYEFyRYwKnjUN3M9D0V59LVNGDKchtj+RBld2oqSAVvEaAQVVLApTHDB52kdQYQYKAsa2NLnl4lIUbr6pYKN5469mS5hjcmQ==;",
         "Origin":"http://fanyi.qq.com"
     }
-    ret = requests.post('https://fanyi.qq.com/api/translate',data=data,headers=t_headers).json()
+    ret = requests.post('https://fanyi.qq.com/api/translate',data=data,headers=t_headers,timeout=5).json()
     trans = []
     for item in ret['translate']['records']:
         trans.append(item['targetText'])
@@ -115,7 +115,7 @@ def sogou_translate(content, from_lang='zh-CHS',to='en'):
         "oxford":"on",
         "isReturnSugg": "off"
     }
-    ret = requests.post('http://fanyi.sogou.com/reventondc/translate',data=data).json()
+    ret = requests.post('http://fanyi.sogou.com/reventondc/translate',data=data,timeout=5).json()
     return ret['translate']['dit']
 
 _baidu_js = """
@@ -181,7 +181,7 @@ def baidu_translate(content,from_lang='zh',to='en'):
         "Cookie":"BAIDUID=16FFA1EAAF1A387C647A22DB9FC81DAE:FG=1; BIDUPSID=16FFA1EAAF1A387C647A22DB9FC81DAE; PSTM=1514024118; __cfduid=d2f7fd3a024d1ee90b8a817ddd866d9bc1514812370; REALTIME_TRANS_SWITCH=1; FANYI_WORD_SWITCH=1; HISTORY_SWITCH=1; SOUND_SPD_SWITCH=1; SOUND_PREFER_SWITCH=1; BDUSS=E83bFplYnBRen5hV3FKNDZCM3ZSZldWMVBjV1ZGbW9uTTVwcjFYVDQzTGVFTlJhQVFBQUFBJCQAAAAAAAAAAAEAAADnIjgkcG9obG9ndTQxNTA3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN6DrFreg6xaS; BDORZ=B490B5EBF6F3CD402E515D22BCDA1598; H_PS_PSSID=1429_21103_18559_22075; PSINO=3; locale=zh; Hm_lvt_64ecd82404c51e03dc91cb9e8c025574=1525654866,1525657996,1525658015,1525671031; Hm_lpvt_64ecd82404c51e03dc91cb9e8c025574=1525671031; to_lang_often=%5B%7B%22value%22%3A%22en%22%2C%22text%22%3A%22%u82F1%u8BED%22%7D%2C%7B%22value%22%3A%22zh%22%2C%22text%22%3A%22%u4E2D%u6587%22%7D%5D; from_lang_often=%5B%7B%22value%22%3A%22zh%22%2C%22text%22%3A%22%u4E2D%u6587%22%7D%2C%7B%22value%22%3A%22en%22%2C%22text%22%3A%22%u82F1%u8BED%22%7D%5D",
         "User-Agent":"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36"
     }
-    ret = requests.post('https://fanyi.baidu.com/v2transapi',data=data,headers=b_headers).json()
+    ret = requests.post('https://fanyi.baidu.com/v2transapi',data=data,headers=b_headers,timeout=5).json()
     return ret['trans_result']['data'][0]['dst']
 
 
@@ -261,7 +261,7 @@ def google_translate(content, from_lang='zh-CN',to='en'):
         "tk":_google_token(content),
         "q":content,
     }
-    ret = requests.get("https://translate.google.cn/translate_a/single",params=data).json()
+    ret = requests.get("https://translate.google.cn/translate_a/single",params=data,timeout=5).json()
     trans = []
     for item in ret[0]:
         trans.append(item[0])
