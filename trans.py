@@ -4,7 +4,7 @@ import time
 
 from translation_apis import sogou_translate,baidu_translate,youdao_translate,google_translate,tencent_translate
 
-TRANS_APIS = [youdao_translate,sogou_translate,baidu_translate,google_translate,tencent_translate]
+TRANS_APIS = [youdao_translate,sogou_translate,baidu_translate,tencent_translate]
 API_NUM = len(TRANS_APIS)
 tran_idx = 0
 translate_gap = {api.__name__:time.time() for api in TRANS_APIS}
@@ -68,7 +68,7 @@ def main():
         new_data.append(new_item)
     
     print("# Translated {0} items, start write to file...".format(len(new_data)))
-    with open(flags.out_file,'w') as f:
+    with open(flags.out_file,'w',encoding='utf8') as f:
         for item in new_data:
             f.write(json.dumps(item,ensure_ascii=False) + '\n')
 
