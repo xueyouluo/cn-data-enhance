@@ -7,11 +7,14 @@ from translation_apis import sogou_translate,baidu_translate,youdao_translate,go
 TRANS_APIS = [youdao_translate,sogou_translate,baidu_translate,google_translate,tencent_translate]
 api_num = len(TRANS_APIS)
 tran_idx = 0
+translate_apis = {api.__name__:api for api in TRANS_APIS}
 translate_gap = {api.__name__:time.time() for api in TRANS_APIS}
 translate_fail = {api.__name__:0 for api in TRANS_APIS}
 
 def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter, description='translation')
+    parser.register("type", "bool", lambda v: v.lower() == "true")
+    parser.add_argument("--match", type='bool', nargs="?", const=True, default=False, help="Whether need to match api")
     parser.add_argument("--data_file", type=str, default=None, help="data file", required=True)
     parser.add_argument("--source", type=str, default='zh', help="source language", required=True)
     parser.add_argument("--target", type=str, default='en', help="target language", required=True)
@@ -27,16 +30,20 @@ def main():
     print("# Translation from {0} to {1}".format(flags.source,flags.target))
     print("# Start to translation file {0} from index {1} to {2}, size={3}".format(flags.data_file,flags.start,flags.start+flags.size,flags.size))
     
-    def translation(content,from_lang='zh', to='en'):
+    def translation(content,from_lang='zh', to='en', old_api_name=None):
         global tran_idx
         global translate_gap
         global translate_fail
         global api_num 
+        global translate_apis
 
         retry = api_num
         while retry > 0:
             try:
-                api = TRANS_APIS[tran_idx%api_num]
+                if old_api_name is not None and translate_fail[old_api_name]<10:
+                    api = translate_apis[old_api_name]
+                else:
+                    api = TRANS_APIS[tran_idx%api_num]
                 if translate_fail[api.__name__] >= 10:
                     TRANS_APIS.remove(api)
                     api_num -= 1
@@ -51,9 +58,10 @@ def main():
                 translate_fail[api.__name__] = 0
                 return translated,api.__name__
             except:
-                print("# Warning - {0} api not working... Try next api".format(TRANS_APIS[tran_idx%api_num].__name__))
-                translate_fail[TRANS_APIS[tran_idx%api_num].__name__] += 1
-                translate_gap[TRANS_APIS[tran_idx%api_num].__name__] = time.time()
+                print("# Warning - {0} api not working... Try next api".format(api.__name__))
+                translate_fail[TRANS_APIS[api.__name__]] += 1
+                translate_gap[TRANS_APIS[api.__name__]] = time.time()
+                old_api_name = None
                 tran_idx += 1
                 retry -= 1
         print("# Error: All apis are not working...")
@@ -68,7 +76,8 @@ def main():
                 content = item['content']
             new_item = item.copy()
             start = time.time()
-            new_content,api_name = translation(content,flags.source,flags.target)
+            old_api_name = new_item.get("{0}_api".format(flags.source),None)
+            new_content,api_name = translation(content,flags.source,flags.target, old_api_name)
             end = time.time()
             if new_content is None:
                 print("# No result, stop early")
