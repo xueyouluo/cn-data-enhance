@@ -1,7 +1,7 @@
 python trans.py \
---data_file c:/Users/Jason/Desktop/work/ai-challenger/train.json \
---out_file c:/Users/Jason/Desktop/work/ai-challenger/50000-100000.json \
+--data_file /data/xueyou/data/ai_challenger_sentiment/enhance/train.json \
+--out_file /data/xueyou/data/ai_challenger_sentiment/enhance/74893-100000.json \
 --source zh \
 --target en \
---start 50000 \
---size 50000
+--start 74893 \
+--size 25107

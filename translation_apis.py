@@ -26,7 +26,7 @@ def youdao_translate(content, from_lang='zh',to='en'):
     from_lang = langs_mapping[from_lang]
     to = langs_mapping[to]
     headers = {
-        "Cookie":'OUTFOX_SEARCH_USER_ID=-2022895048@10.168.8.76;',
+        "Cookie":'OUTFOX_SEARCH_USER_ID=1530094605@10.169.0.84;',
         "Referer":'http://fanyi.youdao.com/',
         'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'
         }
