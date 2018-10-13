@@ -1,7 +1,8 @@
 python trans.py \
---data_file /data/xueyou/data/ai_challenger_sentiment/enhance/train.json \
---out_file /data/xueyou/data/ai_challenger_sentiment/enhance/74893-100000.json \
---source zh \
---target en \
---start 74893 \
---size 25107
+--data_file /data/xueyou/data/ai_challenger_sentiment/enhance/en_train.json \
+--out_file  /data/xueyou/data/ai_challenger_sentiment/enhance/zh_train_95806-105000.json \
+--source en \
+--target zh \
+--start 95806 \
+--end 105000 \
+--match true
